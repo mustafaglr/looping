@@ -1,0 +1,12 @@
+version: '3.1'
+
+services:
+
+  mongo:
+    image: mongo
+    restart: always
+
+  app:
+    build: .
+    ports:
+      - "3000:5000"
