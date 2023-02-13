@@ -4,7 +4,7 @@ metadata:
   name: {{ .Values.app.deployment.name }}
 spec:
   selector:
-    app: knote
+    app: {{ .Values.app.deployment.name }}
   ports:
     - port: 80
       targetPort: 5000
