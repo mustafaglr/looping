@@ -12,8 +12,10 @@ spec:
       labels:
         app: {{ .Values.app.deployment.name }}
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: "{{ .Values.app.deployment.nodeselector }}"
       imagePullSecrets:
-      - name: harbor
+      - name: {{ .Values.app.deployment.imagePullSecrets }}
       containers:
         - name: app
           image: {{ .Values.app.deployment.image }}

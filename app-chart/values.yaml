@@ -6,4 +6,6 @@ app:
     imagePullPolicy: Always
     name: app
     image: ""
+    nodeselector: k8s-4
+    imagePullSecrets: harbor
 
