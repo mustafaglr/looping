@@ -1,0 +1,8 @@
+mongo:
+  service:
+    port: 27017
+    targetPort: 27017
+  deployment:
+    image: mongo:6.0.2-focal
+    containerPort: 27017
+    mountPath: /data/db
