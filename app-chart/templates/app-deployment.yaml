@@ -12,6 +12,8 @@ spec:
       labels:
         app: {{ .Values.app.deployment.name }}
     spec:
+      imagePullSecrets:
+      - name: harbor
       containers:
         - name: app
           image: {{ .Values.app.deployment.image }}
@@ -25,5 +27,4 @@ spec:
             {{- end }}
           {{- end }}
           imagePullPolicy: {{ .Values.app.deployment.imagePullPolicy }}
-          imagePullSecrets:
-          - name: harbor
+          
