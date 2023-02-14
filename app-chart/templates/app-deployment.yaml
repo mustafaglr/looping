@@ -1,9 +1,11 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout 
 metadata:
   name: {{ .Values.app.deployment.name }}
+  labels:
+    app: {{ .Values.app.deployment.name }}
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: {{ .Values.app.deployment.name }}
@@ -15,30 +17,34 @@ spec:
       nodeSelector:
         kubernetes.io/hostname: "{{ .Values.app.deployment.nodeselector }}"
       imagePullSecrets:
-      - name: {{ .Values.app.deployment.imagePullSecrets }}
-      containers:
-        - name: app
-          image: {{ .Values.app.deployment.image }}
-          livenessProbe:
-            httpGet:
-              path: /
-              port: 5000
-            initialDelaySeconds: 3
-            periodSeconds: 3
-          readinessProbe:
-            httpGet:
-              path: /
-              port: 5000
-            initialDelaySeconds: 3
-            periodSeconds: 3
-          ports:
-            - containerPort: 5000
+        - name: {{ .Values.app.deployment.imagePullSecrets }}
+      containers:      
+      - name: app
+        image: {{ .Values.app.deployment.image }}
+        imagePullPolicy: {{ .Values.app.deployment.imagePullPolicy }}
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 5000
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 5000
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        ports:
+        - containerPort: 5000
           {{- if .Values.env }}
-          env:
-            {{- range $key, $value := .Values.env }}
-            - name: {{ $key }}
-              value: "{{ $value }}"
-            {{- end }}
+        env:
+          {{- range $key, $value := .Values.env }}
+          - name: {{ $key }}
+            value: "{{ $value }}"
           {{- end }}
-          imagePullPolicy: {{ .Values.app.deployment.imagePullPolicy }}
-          
+        {{- end }}
+  strategy:
+    blueGreen:
+      activeService: {{ .Values.app.deployment.name }}-green
+      previewService: {{ .Values.app.deployment.name }}-blue
+      autoPromotionEnabled: false
