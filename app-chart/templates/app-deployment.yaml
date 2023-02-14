@@ -22,6 +22,13 @@ spec:
       - name: app
         image: {{ .Values.app.deployment.image }}
         imagePullPolicy: {{ .Values.app.deployment.imagePullPolicy }}
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: 100m
+            memory: 100Mi
         livenessProbe:
           httpGet:
             path: /
