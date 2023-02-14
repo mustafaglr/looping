@@ -7,13 +7,33 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: looping.kubernetes.local
+  - host: looping-green.kubernetes.local
     http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: app
+            name: app-green
+            port:
+              number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: looping-blue.kubernetes.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: app-blue
             port:
               number: 80
