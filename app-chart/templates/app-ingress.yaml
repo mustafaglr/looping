@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: app
+  name: app-green
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
@@ -21,7 +21,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: app
+  name: app-blue
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
