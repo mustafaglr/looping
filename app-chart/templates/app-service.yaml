@@ -1,10 +1,29 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Values.app.deployment.name }}
+  name: {{ .Values.app.deployment.name }}-green
+  namespace: application
 spec:
+  type: ClusterIP
   selector:
     app: {{ .Values.app.deployment.name }}
   ports:
-    - port: 80
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+  
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.app.deployment.name }}-blue
+  namespace: application
+spec:
+  type: ClusterIP
+  selector:
+    app: {{ .Values.app.deployment.name }}
+  ports:
+    - protocol: TCP
+      port: 80
       targetPort: 5000
